@@ -16,7 +16,7 @@ public class UserController {
     // --- AQUI ESTÁ A PROTEÇÃO ---
     // Isso diz: "Se o token não tiver ROLE_ADMIN, rejeite com erro 403"
     @PatchMapping("/{username}/upgrade")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> upgradeParaPremium(@PathVariable String username) {
 
         userService.upgradeParaPremium(username);
