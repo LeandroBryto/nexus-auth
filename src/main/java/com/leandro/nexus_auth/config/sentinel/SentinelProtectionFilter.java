@@ -27,9 +27,14 @@ public class SentinelProtectionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Ignora OPTIONS e Swagger
         String path = request.getRequestURI();
-        if (request.getMethod().equals("OPTIONS") || path.contains("swagger") || path.contains("api-docs")) {
+
+        // Ignora OPTIONS, Swagger e Webhooks confiáveis (Mercado Pago)
+        if (request.getMethod().equals("OPTIONS") || 
+            path.contains("swagger") || 
+            path.contains("api-docs") ||
+            path.contains("/api/v1/public/notifications/mercadopago")) { // <--- ADICIONADO
+            
             filterChain.doFilter(request, response);
             return;
         }
