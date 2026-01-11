@@ -37,6 +37,8 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/public/hooks/**").permitAll() // Rota antiga do Asaas (pode remover depois)
+                        .requestMatchers("/api/v1/public/notifications/**").permitAll() // <--- NOVA ROTA DO MERCADO PAGO
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll() // Libera endpoints de monitoramento
                         .anyRequest().authenticated()
