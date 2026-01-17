@@ -56,7 +56,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         // Permite a origem do seu Frontend Angular (Local e Vercel)
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:4200/",
+                "http://localhost:4200/login",
                 "https://financeiro-f7ucnmw8i-leandrobarretobarreto-2754s-projects.vercel.app",
                 "https://financeiro-*.vercel.app" // Curinga para previews da Vercel
         ));
