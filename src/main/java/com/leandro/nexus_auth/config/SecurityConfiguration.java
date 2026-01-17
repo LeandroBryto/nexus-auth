@@ -54,11 +54,12 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Permite a origem do seu Frontend Angular (Local e Vercel)
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:4200/login",
-                "https://financeiro-f7ucnmw8i-leandrobarretobarreto-2754s-projects.vercel.app",
-                "https://financeiro-*.vercel.app" // Curinga para previews da Vercel
+        // Usando allowedOriginPatterns para suportar wildcards e credenciais corretamente
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:4200",
+                "https://financeiro-fawn-psi.vercel.app",
+                "https://financeiro-git-main-leandrobarretobarreto-2754s-projects.vercel.app",
+                "https://financeiro-f7ucnmw8i-leandrobarretobarreto-2754s-projects.vercel.app"
         ));
         // Permite os métodos HTTP comuns
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
