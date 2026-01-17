@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final JavaMailSender mailSender;
+    private final UserService userService;
 
     // 1. REGISTRO (Usa RegistroDTO)
     @Transactional
@@ -71,22 +73,19 @@ public class AuthService {
 
     // 2. LOGIN (Usa LoginRequestDTO)
     public AuthenticationResponseDTO login(LoginRequestDTO request, HttpServletRequest httpRequest) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getSenha())
         );
 
-        Usuario user = usuarioRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        user.setDataUltimoLogin(LocalDateTime.now());
-        user.setIpUltimoLogin(getClientIp(httpRequest));
-        usuarioRepository.save(user);
+        Usuario user = (Usuario) authentication.getPrincipal();
+        String clientIp = getClientIp(httpRequest);
+        userService.registrarLoginAsync(user, clientIp);
 
         String jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponseDTO.builder()
                 .accessToken(jwtToken)
-                .refreshToken(jwtService.generateRefreshToken(user)) // <--- TEM QUE TER ESSA LINHA (Se não colocar, vai null)
+                .refreshToken(jwtService.generateRefreshToken(user))
                 .build();
     }
 
