@@ -1,6 +1,5 @@
 package com.leandro.nexus_auth.config;
 
-import com.leandro.nexus_auth.service.SentinelService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +15,6 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private final SentinelService sentinelService;
-
     private String getStackTraceAsString(Exception ex) {
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));
@@ -29,19 +26,7 @@ public class GlobalExceptionHandler {
         // 1. Loga o erro localmente para debug imediato
         log.error("Exceção não tratada capturada: {}", ex.getMessage(), ex);
 
-        // 2. Determina o usuário (se houver) ou marca como anônimo
-        String principal = (req.getUserPrincipal() != null) ? req.getUserPrincipal().getName() : "Anonymous";
-
-        // 3. Envia o erro para o Sentinel de forma assíncrona
-        sentinelService.reportError(
-                ex.getClass().getSimpleName(),
-                ex.getMessage(),
-                getStackTraceAsString(ex),
-                principal,
-                req.getRequestURI()
-        );
-
-        // 4. Retorna uma resposta padrão para o cliente
+        // 2. Retorna uma resposta padrão para o cliente
         return ResponseEntity.status(500).body(Map.of("error", "Ocorreu um erro interno no servidor."));
     }
 }

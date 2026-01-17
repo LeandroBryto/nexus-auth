@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableFeignClients
-@EnableAsync // <-- Adicionado para o Sentinel
+@EnableAsync
 public class NexusAuthApplication {
 
 	public static void main(String[] args) {
