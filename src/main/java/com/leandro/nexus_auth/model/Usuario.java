@@ -30,7 +30,6 @@ public class Usuario implements UserDetails {
     @Column(name = "nome_completo", nullable = false)
     private String nomeCompleto;
 
-    // --- MUDANÇA AQUI: Username é o login principal ---
     @Column(name = "username",  length = 255)
     private String username;
 
@@ -40,8 +39,6 @@ public class Usuario implements UserDetails {
     @Column(name = "senha", nullable = false)
     private String senha;
 
-    // --- CONTROLO DE ACESSO ---
-
     @Enumerated(EnumType.STRING)
     @Column(name = "perfil", nullable = false)
     private PerfilUsuario perfil;
@@ -49,8 +46,6 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "plano", nullable = false)
     private TipoPlano plano;
-
-    // --- AUDITORIA ---
 
     @Column(name = "ativo")
     private boolean ativo;
@@ -63,8 +58,6 @@ public class Usuario implements UserDetails {
 
     @Column(name = "ip_ultimo_login")
     private String ipUltimoLogin;
-
-    // --- SPRING SECURITY ---
 
     @PrePersist
     public void prePersist() {
